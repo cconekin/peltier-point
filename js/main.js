@@ -29,7 +29,7 @@ var isMobile = {
 $(document).ready(function () {
 
     bind_shrink_header();
-    
+
     var isMobile = false;
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         isMobile = true;
@@ -153,7 +153,8 @@ $(document).ready(function () {
     /* ===================================
      Toggle Close 
      ====================================== */
-    $(document).on('click', 'ul.navbar-nav li', function (event) {  
+    $(document).on('click', 'ul.navbar-nav li', function (event) {
+  
         $('#bs-example-navbar-collapse-1').removeClass('in');
         $('#bs-example-navbar-collapse-1').addClass('collapse');
         $('.navbar-toggle').addClass('collapsed');
@@ -202,7 +203,7 @@ $(document).ready(function () {
                             $.magnificPopup.proto.close.call(this);
                         } else {
                             $(document).on('click', 'button.mfp-close', function (event) {
-                               $.magnificPopup.proto.close.call(this);
+                                $.magnificPopup.proto.close.call(this);
                             });
                         }
                     }
@@ -210,10 +211,21 @@ $(document).ready(function () {
             }
     });
 
+     /* ===================================
+     shrink navigation
+     ====================================== */
+
+     $('.navigation-menu').onePageNav({
+        scrollSpeed: 750,
+        scrollThreshold: 0.2, // Adjust if Navigation highlights too early or too late
+        scrollOffset: 79, //Height of Navigation Bar
+        currentClass: 'active',
+        filter: ':not(.btn-very-small)'
+    });
+     
      /*==============================================================
      smooth scroll With Shrink Navigation
      ==============================================================*/
-
     $(window).scroll(function () {
         
         var shrink_header = $('.shrink-header').length;
@@ -269,18 +281,11 @@ $(document).ready(function () {
         });
     });
 
-    /* ===================================
-     shrink navigation Active
-     ====================================== */
-    $('.navigation-menu').onePageNav({
-        scrollSpeed: 750,
-        scrollThreshold: 0.2, // Adjust if Navigation highlights too early or too late
-        scrollOffset: 79, //Height of Navigation Bar
-        currentClass: 'active',
-        filter: ':not(.btn-very-small)'
-    });
+
+    
+
     /*===========================================================
-     Contact Form 
+     Contact Form With API Integration
      ============================================================ */
 
     $('.tz_submit').on('click', function (event) {
@@ -298,7 +303,7 @@ $(document).ready(function () {
         $('#' + section_id).find('form').find('button').after(submit_loader);
         $('#' + section_id).find('form input, form select,form textarea').each(
                 function (index) {
-                    
+
                     if ($(this).is('[data-email="required"]')) {
                         var required_val = $(this).val();
                         if (required_val != '') {
@@ -318,7 +323,7 @@ $(document).ready(function () {
                     }
 
                 });
-        
+
         var captcha_length = $('.g-recaptcha').length;
         if (captcha_length >= 1) {
             var response = grecaptcha.getResponse();
@@ -334,55 +339,56 @@ $(document).ready(function () {
                 tz_process = true;
             }
         }
-        if (tz_process) 
+        if (tz_process)
         {
             localStorage.setItem('tz_section',section_id);
             $.post("tz_mail/contact.php", {
-                data: { input_name: name_attr,values: values,section_id:section_id},
+                data: {input_name: name_attr, values: values,section_id:section_id},
                 type: "POST",
             }, function (data) {
                 $('#loading').remove();
                 var tz_form_output = '';
-                if(data) 
+                if (data)
                 {
-                    if(data.type == "tz_message") 
+                    if (data.type == "tz_message")
                     {
-                       $('#error').remove(); 
-                       $('#success').remove();
-                       $('#google-recaptcha-error').remove(); 
-                       var tz_form_output = '<div id="success" class="no-margin-lr alt-font">'+data.text+'</div>';
+                        $('#error').remove();
+                        $('#success').remove();
+                        $('#google-recaptcha-error').remove();
+                        var tz_form_output = '<div id="success" class="no-margin-lr alt-font">' + data.text + '</div>';
                     } else if (data.type == "tz_error") {
                         $('#success').remove();
                         $('#error').remove();
-                        $('#google-recaptcha-error').remove();  
-                        var tz_form_output = '<div id="error" class="no-margin-lr alt-font">'+data.text+'</div>';
-                    }else{
+                        $('#google-recaptcha-error').remove(); 
+                        var tz_form_output = '<div id="error" class="no-margin-lr alt-font">' + data.text + '</div>';
+                    } else {
                         var tz_form_output = '';
-                    } 
+                    }
                 }
 
-                if(tz_form_output != '')
+                if (tz_form_output != '')
                 {
-                    var section_id = localStorage.getItem('tz_section')
-                    $('#'+section_id).find('form').before(tz_form_output);
+                    var section_id = localStorage.getItem('tz_section');
+                    $('#' + section_id).find('form').before(tz_form_output);
                 }
                 $('#' + section_id).find('form input,form textarea').each(function (index) {
                     $(this).val('');
                     $(this).removeClass('tz_input_error');
                 });
 
-                setTimeout(function(){
+                setTimeout(function () {
                     $('#success').fadeOut();
                     $('#success').remove();
                     $('#error').fadeOut();
                     $('#error').remove();
                     $(this).submit();
-                 },5000);
+                }, 5000);
+
                 localStorage.removeItem('tz_section');
 
             }, 'json');
         }
-        
+
         $('#' + section_id).find('form input,form textarea').each(function (index) {
             $(this).keypress(function () {
                 $(this).removeClass('tz_input_error');
@@ -398,7 +404,7 @@ $(document).ready(function () {
         $('#' + section_id).find('form select').each(function (index) {
             $(this).on("change", function () {
                 var val = this.value;
-                if (val == ''){
+                if (val == '') {
                     $(this).removeClass('tz_input_error');
                 }
             });
@@ -406,7 +412,7 @@ $(document).ready(function () {
     });
 
     /*===========================================================
-    Hotel Contact Form 
+    Real Estate Contact Form 
     ============================================================ */
 
     $('.default-submit').on('click', function (event) {
@@ -422,6 +428,8 @@ $(document).ready(function () {
         $('#' + section_id).find('form').find('button').after(submit_loader);
         var name = $('#' + section_id).find('[name=name]').val();
         var email = $('#' + section_id).find('[name=email]').val();
+        var phone_number = $('#' + section_id).find('[name=phone]').val();
+        var comment = $('#' + section_id).find('[name=comment]').val();
         if(name == "")
         {
             $('#' + section_id).find('[name=name]').addClass('tz_input_error');
@@ -465,28 +473,29 @@ $(document).ready(function () {
             }
         }
         
+
         if(tz_process) 
         {
             localStorage.setItem('tz_section',section_id);
-            $.post("tz_mail/hotel-contact.php", {
-                data: { name: name, email: email},
+            $.post("tz_mail/real-contact.php", {
+                data: { name: name, email: email,phone_number:phone_number,comment :comment},
                 type: "POST",
             }, function (data) {
                 $('#loading').remove();
                 var tz_form_output = '';
-                if(data) 
+                if (data) 
                 {
                     if(data.type == "tz_message") 
                     {
-                       $('#error').remove(); 
                        $('#success').remove();
+                       $('#error').remove(); 
                        $('#google-recaptcha-error').remove(); 
                        var tz_form_output = '<div id="success" class="no-margin-lr alt-font">'+data.text+'</div>';
                     } else if (data.type == "tz_error") {
-                       $('#error').remove(); 
-                       $('#success').remove();
-                       $('#google-recaptcha-error').remove();  
-                       var tz_form_output = '<div id="error" class="no-margin-lr alt-font">'+data.text+'</div>';
+                        $('#success').remove();
+                        $('#error').remove();
+                        $('#google-recaptcha-error').remove();  
+                        var tz_form_output = '<div id="error" class="no-margin-lr alt-font">'+data.text+'</div>';
                     }else{
                         var tz_form_output = '';
                     } 
@@ -494,7 +503,7 @@ $(document).ready(function () {
 
                 if(tz_form_output != '')
                 {
-                    var section_id = localStorage.getItem('tz_section')
+                    var section_id = localStorage.getItem('tz_section');
                     $('#'+section_id).find('form').before(tz_form_output);
                 }
                 $('#' + section_id).find('form input,form textarea').each(function (index) {
@@ -516,6 +525,116 @@ $(document).ready(function () {
 
         }
     });
+
+    /*===========================================================
+    Hero Contact Form 
+    ============================================================ */
+
+    $('.hero-submit').on('click', function (event) {
+        event.preventDefault();
+        var tz_process = "";
+        var section_id = $(this).closest("section").attr('id');
+        var submit_loader = '<div class="loading text-deep-green display-inline-block margin-five no-margin-tb no-margin-right" id="loading">Loading...</div>';
+        $('#' + section_id).find('form').find('button').after(submit_loader);
+        var name = $('#' + section_id).find('[name=name]').val();
+        var email = $('#' + section_id).find('[name=email]').val();
+        var phone_number = $('#' + section_id).find('[name=phone]').val();
+        var comment = $('#' + section_id).find('[name=comment]').val();
+        if(name == "")
+        {
+            $('#' + section_id).find('[name=name]').addClass('tz_input_error');
+            $('#loading').remove();
+            tz_process = false;
+        }else{
+             $('#' + section_id).find('[name=name]').removeClass('tz_input_error');
+             tz_process = true;
+        }
+        if(email == "")
+        {
+            $('#' + section_id).find('[name=email]').addClass('tz_input_error');
+            $('#loading').remove();
+            tz_process = false;
+        }else if(email != ''){
+
+            if(IsEmail(email)==false)
+            {
+                $('#' + section_id).find('[name=email]').addClass('tz_input_error');
+                $('#loading').remove();
+                tz_process = false;
+            }else{
+                $('#' + section_id).find('[name=email]').removeClass('tz_input_error');
+                tz_process = true;
+            }
+        }
+
+        var captcha_length = $('.g-recaptcha').length;
+        if (captcha_length >= 1) {
+            var response = grecaptcha.getResponse();
+            //recaptcha failed validation
+            if (response.length == 0) {
+                $('#loading').remove();
+                $('#google-recaptcha-error').remove();
+                $('#' + section_id).find('.g-recaptcha').after('<span class="google-recaptcha-error" id="google-recaptcha-error">Invalid recaptcha</span>');
+                tz_process = false;
+            } else {
+                $('#google-recaptcha-error').remove();
+                $('#recaptcha-error').hide();
+                tz_process = true;
+            }
+        }
+        
+
+        if(tz_process) 
+        {
+            localStorage.setItem('tz_section',section_id);
+            $.post("tz_mail/hero-contact.php", {
+                data: { name: name, email: email,phone_number:phone_number,comment :comment},
+                type: "POST",
+            }, function (data) {
+                $('#loading').remove();
+                var tz_form_output = '';
+                if (data) 
+                {
+                    if(data.type == "tz_message") 
+                    {
+                       $('#success').remove();
+                       $('#error').remove(); 
+                       $('#google-recaptcha-error').remove(); 
+                       var tz_form_output = '<div id="success" class="no-margin-lr alt-font">'+data.text+'</div>';
+                    } else if (data.type == "tz_error") {
+                        $('#success').remove();
+                        $('#error').remove();
+                        $('#google-recaptcha-error').remove();   
+                        var tz_form_output = '<div id="error" class="no-margin-lr alt-font">'+data.text+'</div>';
+                    }else{
+                        var tz_form_output = '';
+                    } 
+                }
+
+                if(tz_form_output != '')
+                {
+                    var section_id = localStorage.getItem('tz_section');
+                    $('#'+section_id).find('form').before(tz_form_output);
+                }
+                $('#' + section_id).find('form input,form textarea').each(function (index) {
+                    $(this).val('');
+                    $(this).removeClass('tz_input_error');
+                });
+
+                 setTimeout(function(){
+                    $('#success').fadeOut();
+                    $('#success').remove();
+                    $('#error').fadeOut();
+                    $('#error').remove();
+                    $(this).submit();
+                 },5000);
+                 localStorage.removeItem('tz_section');
+
+            }, 'json');
+
+        }
+    });
+
 
     $('form input,form textarea').each(function (index) {
         $(this).keypress(function () {
@@ -551,6 +670,9 @@ $(document).ready(function () {
     
 });
 
+/* ===================================
+ shrink navigation
+ ====================================== */
 /* ===================================
  shrink navigation
  ====================================== */
@@ -598,7 +720,7 @@ function bind_shrink_header() {
 setTimeout(function () {
     $(window).scroll();
 }, 500);
-
+     
 
 /*==============================================================
  portfolio-filter
@@ -615,18 +737,15 @@ $portfolio_filter.imagesLoaded(function () {
 $grid_selectors = $('.portfolio-filter > li > a');
 $grid_selectors.on('click', function ()
 {
-    
     $portfolio_filter = $('.grid');
     $('.portfolio-filter > li').removeClass('active');
     $(this).parent().addClass('active');
-
     var selector = $(this).attr('data-filter');
     $portfolio_filter.imagesLoaded(function () {
         $portfolio_filter.isotope({
             filter: selector,
             itemSelector: 'li',
             layoutMode: 'masonry'
-
         });
     });
     return false;
@@ -635,7 +754,6 @@ $grid_selectors.on('click', function ()
 $(window).resize(function () {
     setTimeout(function () {
         $portfolio_filter.isotope('layout');
-
         //set equalize height
         if (!isMobile.any()) {
             $(window).unbind('equalize');
@@ -674,6 +792,7 @@ $('.accordion-style1 .collapse').on('hide.bs.collapse', function () {
     $('a[href="#' + id + '"]').closest('.panel-heading').removeClass('active-accordion');
     $('a[href="#' + id + '"] .panel-title').find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
 });
+
 
 /*==============================================================
  countdown timer
@@ -747,6 +866,7 @@ if( $('#twitter-feed').length )
     };
     twitterFetcher.fetch(tz_config_feed);
 }
+
 /*==============================================================
  wow animation - on scroll
  ==============================================================*/

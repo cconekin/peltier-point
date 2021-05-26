@@ -5,11 +5,13 @@
 	  
 	$name = $_POST['data']['name'];
 	$from = $_POST['data']['email'];
-
+	$phone_num = $_POST['data']['phone_number'];
+	$comment = $_POST['data']['comment'];
+	
 	// Email Receiver Address
 	$receiver="info@yourdomain.com";
-	$from_email = "noreply@yourdomain.com"; 
-	$subject = "Contact form details";
+	$from_email ="noreply@yourdomain.com"; 
+	$subject="Contact form details";
 
 	$message = "
 	<html>
@@ -19,7 +21,7 @@
 	<body>
 	<table width='50%' border='0' align='center' cellpadding='0' cellspacing='0'>
 	<tr>
-	<td colspan='2' align='center' valign='top'><img style=' margin-top: 15px; ' src='http://www.themezaa.com/html/leadgen/builder/images/logo-black-big.png'></td>
+	<td colspan='2' align='center' valign='top'><img style=' margin-top: 15px; ' src='http://www.themezaa.com/html/leadgen/builder/images/logo-black-big.png' ></td>
 	</tr>
 	<tr>
 	<td width='50%' align='right'>&nbsp;</td>
@@ -32,6 +34,14 @@
 	<tr>
 	<td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Email:</td>
 	<td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$from."</td>
+	</tr>
+	<tr>
+	<td align='right' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Phone Number:</td>
+	<td align='left' valign='top' style='border-top:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".$phone_num."</td>
+	</tr>
+	<tr>
+	<td align='right' valign='top' style='border-top:1px solid #dfdfdf; border-bottom:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 5px 7px 0;'>Message:</td>
+	<td align='left' valign='top' style='border-top:1px solid #dfdfdf; border-bottom:1px solid #dfdfdf; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#000; padding:7px 0 7px 5px;'>".nl2br($comment)."</td>
 	</tr>
 	</table>
 	</body>

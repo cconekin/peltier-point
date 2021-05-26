@@ -183,8 +183,7 @@
 			var $parent;
 
 			//If the position is set
-			if(position !== null) 
-                        {
+			if(position !== null) {
 				$parent = this.$elem.find('a[href$="#' + position + '"]').parent();
 
 				//If it's not already the current section
